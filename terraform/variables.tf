@@ -8,11 +8,6 @@ variable "location" {
   default = "Brazil South"
 }
 
-variable "aks_cluster_name" {
-  type    = string
-  default = "aks-cluster-brz"
-}
-
 variable "mysql_server_name" {
   type    = string
   default = "mssql-server-brz"
