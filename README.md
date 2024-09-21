@@ -7,9 +7,7 @@ Create an Azure Kubernetes Service (AKS) cluster integrated with Azure Applicati
 
 ``` shell
 az group create --name terraform-state-rg-20240919 --location eastus
-
 az storage account create --name terraformstate20240919 --resource-group terraform-state-rg-20240919 --location eastus --sku Standard_LRS
-
 az storage container create --name tfstate --account-name terraformstate20240919
 ```
 
