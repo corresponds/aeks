@@ -40,81 +40,81 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   }
 }
 
-# resource "azurerm_application_gateway" "app_gateway" {
-#   name                = "app-gateway"
-#   location            = azurerm_resource_group.aks_rg.location
-#   resource_group_name = azurerm_resource_group.aks_rg.name
+resource "azurerm_application_gateway" "app_gateway" {
+  name                = "app-gateway"
+  location            = azurerm_resource_group.aks_rg.location
+  resource_group_name = azurerm_resource_group.aks_rg.name
 
-#   sku {
-#     name     = "Standard_v2"
-#     tier     = "Standard_v2"
-#     capacity = 2
-#   }
+  sku {
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 2
+  }
 
-#   gateway_ip_configuration {
-#     name      = "app-gateway-ip-config"
-#     subnet_id = azurerm_subnet.app_gateway_subnet.id
-#   }
+  gateway_ip_configuration {
+    name      = "app-gateway-ip-config"
+    subnet_id = azurerm_subnet.app_gateway_subnet.id
+  }
 
-#   frontend_port {
-#     name = "frontend-port"
-#     port = 80
-#   }
+  frontend_port {
+    name = "frontend-port"
+    port = 80
+  }
 
-#   frontend_ip_configuration {
-#     name                 = "frontend-ip-config"
-#     public_ip_address_id = azurerm_public_ip.app_gateway_public_ip.id
-#   }
+  frontend_ip_configuration {
+    name                 = "frontend-ip-config"
+    public_ip_address_id = azurerm_public_ip.app_gateway_public_ip.id
+  }
 
-#   backend_address_pool {
-#     name = "backend-pool"
-#   }
+  backend_address_pool {
+    name = "backend-pool"
+  }
 
-#   http_listener {
-#     name                           = "http-listener"
-#     frontend_ip_configuration_name = "frontend-ip-config"
-#     frontend_port_name             = "frontend-port"
-#     protocol                       = "Http"
-#   }
+  http_listener {
+    name                           = "http-listener"
+    frontend_ip_configuration_name = "frontend-ip-config"
+    frontend_port_name             = "frontend-port"
+    protocol                       = "Http"
+  }
 
-#   request_routing_rule {
-#     name                       = "routing-rule"
-#     rule_type                  = "Basic"
-#     http_listener_name         = "http-listener"
-#     backend_address_pool_name  = "backend-pool"
-#     backend_http_settings_name = "http-settings"
-#     priority                   = 100  # 添加优先级
-#   }
+  request_routing_rule {
+    name                       = "routing-rule"
+    rule_type                  = "Basic"
+    http_listener_name         = "http-listener"
+    backend_address_pool_name  = "backend-pool"
+    backend_http_settings_name = "http-settings"
+    priority                   = 100  # 添加优先级
+  }
 
-#   backend_http_settings {
-#     name                  = "http-settings"
-#     cookie_based_affinity = "Disabled"
-#     port                  = 80
-#     protocol              = "Http"
-#   }
-# }
+  backend_http_settings {
+    name                  = "http-settings"
+    cookie_based_affinity = "Disabled"
+    port                  = 80
+    protocol              = "Http"
+  }
+}
 
-# resource "azurerm_public_ip" "app_gateway_public_ip" {
-#   name                = "app-gateway-public-ip"
-#   location            = azurerm_resource_group.aks_rg.location
-#   resource_group_name = azurerm_resource_group.aks_rg.name
-#   allocation_method   = "Static"
-#   sku                 = "Standard" 
-# }
+resource "azurerm_public_ip" "app_gateway_public_ip" {
+  name                = "app-gateway-public-ip"
+  location            = azurerm_resource_group.aks_rg.location
+  resource_group_name = azurerm_resource_group.aks_rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard" 
+}
 
-# resource "azurerm_virtual_network" "app_gateway_vnet" {
-#   name                = "app-gateway-vnet"
-#   location            = azurerm_resource_group.aks_rg.location
-#   resource_group_name = azurerm_resource_group.aks_rg.name
-#   address_space       = ["10.0.0.0/16"]
-# }
+resource "azurerm_virtual_network" "app_gateway_vnet" {
+  name                = "app-gateway-vnet"
+  location            = azurerm_resource_group.aks_rg.location
+  resource_group_name = azurerm_resource_group.aks_rg.name
+  address_space       = ["10.0.0.0/16"]
+}
 
-# resource "azurerm_subnet" "app_gateway_subnet" {
-#   name                 = "app-gateway-subnet"
-#   resource_group_name  = azurerm_virtual_network.app_gateway_vnet.resource_group_name
-#   virtual_network_name = azurerm_virtual_network.app_gateway_vnet.name
-#   address_prefixes     = ["10.0.1.0/24"]
-# }
+resource "azurerm_subnet" "app_gateway_subnet" {
+  name                 = "app-gateway-subnet"
+  resource_group_name  = azurerm_virtual_network.app_gateway_vnet.resource_group_name
+  virtual_network_name = azurerm_virtual_network.app_gateway_vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
 
 resource "azurerm_mysql_flexible_server" "mysql" {
   name                   = var.mysql_server_name
