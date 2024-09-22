@@ -32,3 +32,15 @@ Welcome to the comprehensive guide on building a resilient Amazon Elastic Kubern
 
 Your contributions are welcome! If you find any issues or have suggestions, please open an [issue] or submit a [pull request].
 
+
+```
+aws eks --region us-east-1 update-kubeconfig --name my-eks
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install my-nginx-ingress ingress-nginx/ingress-nginx
+kubectl get pods -n default
+
+kubectl get svc my-nginx-ingress-ingress-nginx-controller
+NAME                                       TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)                      AGE
+my-nginx-ingress-ingress-nginx-controller   LoadBalancer   10.0.0.123       a1b2c3d4.elb.amazonaws.com   80:32156/TCP,443:32443/TCP   5m
+```

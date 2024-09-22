@@ -214,7 +214,7 @@ EOF
 
 resource "aws_iam_policy_attachment" "example_policy_attachment" {
   name       = "load-balancer-controller-policy-attachment"
-  policy_arn = "arn:aws:iam::549905041826:policy/AWSLoadBalancerControllerIAMPolicy"
+  policy_arn = "arn:aws:iam::061039802912:policy/AWSLoadBalancerControllerIAMPolicy"
   roles      = [aws_iam_role.example_role.name]
 }
 

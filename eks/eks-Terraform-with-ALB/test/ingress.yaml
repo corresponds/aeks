@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo-ingress
+spec:
+  rules:
+  - host: "a29c5c86bb3f843a9810e62d8740b570-490779603.us-east-1.elb.amazonaws.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echoserver
+            port:
+              number: 80
