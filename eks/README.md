@@ -1,7 +1,6 @@
 # eks
 
-Create an Azure Kubernetes Service (AKS) cluster integrated with Azure Application Gateway and Azure Database for MySQL
-
+Create an EKS cluster integrated with ALB,Lambda,Route 53
 
 ## Terraform
 
