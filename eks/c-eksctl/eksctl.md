@@ -14,7 +14,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 
 You can create the EKS cluster by running the following command. Adjust the `--ssh-public-key` parameter to use your own key if needed:
 
-```
+```shell
 eksctl create cluster \
   --version=1.28 \
   --name=Cluster-1 \
@@ -25,7 +25,6 @@ eksctl create cluster \
   --zones=us-west-2a,us-west-2b,us-west-2c \
   --node-volume-type=gp2 \
   --node-volume-size=20
-
 ```
 
 This command will create an EKS cluster with the specified settings, including 1 node, in the `us-west-2` region.
@@ -34,7 +33,7 @@ This command will create an EKS cluster with the specified settings, including 1
 
 After the cluster is created, you need to associate an OpenID Connect (OIDC) provider to allow AWS IAM roles to be assumed by Kubernetes service accounts. Run the following command:
 
-```
+```shell
 eksctl utils associate-iam-oidc-provider \
   --region us-west-2 \
   --cluster Cluster-1 \
@@ -45,7 +44,7 @@ eksctl utils associate-iam-oidc-provider \
 
 Finally, you need to create an IAM service account bound to the IAM policy created in the previous step. This service account will be used by the AWS Load Balancer Controller:
 
-```
+```shell
 eksctl create iamserviceaccount \
   --cluster Cluster-1 \
   --namespace kube-system \
@@ -68,9 +67,9 @@ Replace `<your-account-id>` with your actual AWS account ID.
 
 This will set up the EKS cluster and prepare it for deploying the AWS Load Balancer Controller in the next lab step.
 
-### About deleting
+### Delete
 
-```
+```shell
 eksctl delete cluster --name=Cluster-1 --region=us-west-2
 eksctl delete iamserviceaccount \
   --cluster=Cluster-1 \
@@ -81,4 +80,5 @@ aws iam delete-policy \
   --policy-arn arn:aws:iam::<your-account-id>:policy/AWSLoadBalancerControllerIAMPolicy
 eksctl get cluster --region=us-west-2
 aws iam list-policies --query 'Policies[?PolicyName==`AWSLoadBalancerControllerIAMPolicy`]'
+
 ```
