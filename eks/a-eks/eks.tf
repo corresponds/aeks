@@ -14,16 +14,16 @@ module "eks" {
   enable_irsa = true
 
   eks_managed_node_group_defaults = {
-    disk_size = 50
+    disk_size = 35
   }
 
   eks_managed_node_groups = {
     nodes = {
-      min_size     = 2
-      max_size     = 2
+      min_size     = 1
+      max_size     = 5
       desired_size = 2
 
-      instance_types = ["t3.medium"]
+      instance_types = ["t2.medium"]
     }
   }
 
