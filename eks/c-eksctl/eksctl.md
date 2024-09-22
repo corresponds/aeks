@@ -67,7 +67,7 @@ Replace `<your-account-id>` with your actual AWS account ID.
 
 This will set up the EKS cluster and prepare it for deploying the AWS Load Balancer Controller in the next lab step.
 
-### Delete
+### About Deleting
 
 ```shell
 eksctl delete cluster --name=Cluster-1 --region=us-west-2
