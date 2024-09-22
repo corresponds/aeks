@@ -45,3 +45,12 @@ helm uninstall my-nginx-ingress
 ```
 
 **Note:** After that, set up the ALB Ingress Controller. Use the eksctl.txt file and follow the steps in the file. For testing everything, use the content in the kube folder. This folder contains the deployment file, service file, and ingress file.
+
+
+```
+aws eks update-kubeconfig --name eks-cluster --region us-east-1
+
+helm repo remove eks
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=eks-cluster --set serviceAccount.create=false --set serviceAccount.name=alb-ingress-controller
+```
