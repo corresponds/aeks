@@ -103,5 +103,5 @@ kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/
 helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=eks-cluster --set serviceAccount.create=false --set serviceAccount.name=alb-ingress-controller
 ```
 
-
 ### Notes
+Your contributions are welcome! If you find any issues or have suggestions, please open an [issue](https://github.com/corresponds/gekas/issues) or submit a [pull request](https://github.com/corresponds/gekas/pulls).
