@@ -67,3 +67,18 @@ Replace `<your-account-id>` with your actual AWS account ID.
 - Create IAM service account for the controller
 
 This will set up the EKS cluster and prepare it for deploying the AWS Load Balancer Controller in the next lab step.
+
+### About deleting
+
+```
+eksctl delete cluster --name=Cluster-1 --region=us-west-2
+eksctl delete iamserviceaccount \
+  --cluster=Cluster-1 \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --region=us-west-2
+aws iam delete-policy \
+  --policy-arn arn:aws:iam::<your-account-id>:policy/AWSLoadBalancerControllerIAMPolicy
+eksctl get cluster --region=us-west-2
+aws iam list-policies --query 'Policies[?PolicyName==`AWSLoadBalancerControllerIAMPolicy`]'
+```
