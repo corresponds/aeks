@@ -1,83 +1,69 @@
-### Introduction
+To install an EKS cluster from scratch following the provided steps using `eksctl`, here is how you can replicate the same configuration on your own:
 
-In this lab step, you'll examine and review the EKS cluster 
-configuration which has already been performed (part of the lab launch 
-script). In particular, you'll review the configuration 
-prerequisites required in preparation for you deploying the [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/), to be done in next the lab step.
+### Step 1: Install `eksctl`
 
-**Note**: All commands presented below have already been performed and are shown for review only. 
+Make sure you have `eksctl` installed on your system. If not, you can install it with the following command:
 
-### Review
+```shell
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
 
-1. The EKS cluster provided within this lab has been provisioned using the [eksctl](https://eksctl.io/) utility. The cluster was created with the following script and settings: 
+```
 
-`eksctl create cluster \`
+### Step 2: Create the EKS Cluster
 
-`--version=1.28 \`
+You can create the EKS cluster by running the following command. Adjust the `--ssh-public-key` parameter to use your own key if needed:
 
-`--name=Cluster-1 \`
+```
+eksctl create cluster \
+  --version=1.28 \
+  --name=Cluster-1 \
+  --nodes=1 \
+  --node-type=t2.medium \
+  --ssh-public-key="gekas-public-key" \
+  --region=us-west-2 \
+  --zones=us-west-2a,us-west-2b,us-west-2c \
+  --node-volume-type=gp2 \
+  --node-volume-size=20
 
-`--nodes=1 \`
+```
 
-`--node-type=t2.medium \`
+This command will create an EKS cluster with the specified settings, including 1 node, in the `us-west-2` region.
 
-`--ssh-public-key="cloudacademylab" \`
+### Step 3: Associate IAM OIDC Provider
 
-`--region=us-west-2 \`
+After the cluster is created, you need to associate an OpenID Connect (OIDC) provider to allow AWS IAM roles to be assumed by Kubernetes service accounts. Run the following command:
 
-`--zones=us-west-2a,us-west-2b,us-west-2c \`
+```
+eksctl utils associate-iam-oidc-provider \
+  --region us-west-2 \
+  --cluster Cluster-1 \
+  --approve
+```
 
-`--node-volume-type=gp2 \`
+### Step 5: Create IAM Service Account
 
-`--node-volume-size=20`
+Finally, you need to create an IAM service account bound to the IAM policy created in the previous step. This service account will be used by the AWS Load Balancer Controller:
 
-2. In preparation for deploying the [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/), the following configurations are required.
+```
+eksctl create iamserviceaccount \
+  --cluster Cluster-1 \
+  --namespace kube-system \
+  --name aws-load-balancer-controller \
+  --attach-policy-arn arn:aws:iam::<your-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --override-existing-serviceaccounts \
+  --approve
 
-2.1. An OpenID Connect provider needs to be established. This was performed using the following command: 
+```
 
-`eksctl utils associate-iam-oidc-provider \`
+Replace `<your-account-id>` with your actual AWS account ID.
 
-`--region us-west-2 \`
+### Summary of Commands
 
-`--cluster Cluster-1 \`
+- Install `eksctl`
+- Create the EKS cluster
+- Associate IAM OIDC provider
+- Create IAM policy for AWS Load Balancer Controller
+- Create IAM service account for the controller
 
-`--approve`
-
-2.2. A new IAM Policy was created, providing various permissions 
-required to provision the underlying infrastructure items (ALBs and/or 
-NLBs) created when Ingress and Service cluster resources are created.
-
-**Note**: You can view the specific set of IAM permissions granted here:
-
-https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
-
-`curl -o /tmp/iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json`
-
-`aws iam create-policy \`
-
-`--policy-name AWSLoadBalancerControllerIAMPolicy \`
-
-`--policy-document file:///tmp/iam_policy.json`
-
-2.3. A new cluster service account bound to the IAM policy has been
- created. When the AWS Load Balancer controller is later deployed by 
-you, it will be configured to operate with this service account:
-
-`eksctl create iamserviceaccount \`
-
-`--cluster Cluster-1 \`
-
-`--namespace kube-system \`
-
-`--name aws-load-balancer-controller \`
-
-`--attach-policy-arn arn:aws:iam::${AWS::AccountId}:policy/AWSLoadBalancerControllerIAMPolicy \`
-
-`--override-existing-serviceaccounts \`
-
-`--approve`
-
-### Summary
-
-In this lab step, you reviewed the EKS cluster configuration 
-performed at lab launch time in preparation for the deployment of the [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/), which you will perform in the next lab step.
+This will set up the EKS cluster and prepare it for deploying the AWS Load Balancer Controller in the next lab step.
