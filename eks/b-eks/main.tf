@@ -217,4 +217,3 @@ resource "aws_iam_policy_attachment" "example_policy_attachment" {
   policy_arn = "arn:aws:iam::061039802912:policy/AWSLoadBalancerControllerIAMPolicy"
   roles      = [aws_iam_role.example_role.name]
 }
-

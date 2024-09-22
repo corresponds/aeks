@@ -1,7 +1,7 @@
 variable "project" {
   description = "project_name"
-  type = string
-  default = "eks"
+  type        = string
+  default     = "eks"
 }
 
 variable "tags" {
@@ -10,6 +10,6 @@ variable "tags" {
   default = {
     "Project"     = "TerraformEKSWorkshop"
     "Environment" = "Development"
-    "Owner"       = "Vishal"
+    "Owner"       = "gekas"
   }
 }

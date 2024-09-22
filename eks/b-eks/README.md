@@ -39,6 +39,15 @@ aws eks update-kubeconfig --name eks-cluster --region us-east-1
 kubectl get nodes
 ```
 
+Open main.tf,Change to your account id
+```hcl
+resource "aws_iam_policy_attachment" "example_policy_attachment" {
+  name       = "load-balancer-controller-policy-attachment"
+  policy_arn = "arn:aws:iam::<YourAccountId>:policy/AWSLoadBalancerControllerIAMPolicy"
+  roles      = [aws_iam_role.example_role.name]
+}
+```
+
 ### 4. Install NGINX Ingress Controller using Helm
 
 Add the official NGINX Ingress Controller Helm repository and install the controller:
